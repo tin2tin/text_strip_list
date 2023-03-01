@@ -21,6 +21,8 @@ def get_strip_by_name(name):
 
 
 def update_text(self, context):
+    print(self)
+    print(context)
     for strip in bpy.context.scene.sequence_editor.sequences:
         if strip.type == "TEXT" and strip.name == self.name:
             # Update the text of the text strip
@@ -175,12 +177,15 @@ class TEXT_OT_select_next(bpy.types.Operator):
     bl_label = "Select Next"
 
     def execute(self, context):
+        scene = context.scene
         current_index = context.scene.text_strip_items_index
         max_index = len(context.scene.text_strip_items) - 1
 
         if current_index < max_index:
             context.scene.text_strip_items_index += 1
-            update_text(self, context)
+            selected_item = scene.text_strip_items[scene.text_strip_items_index]
+            selected_item.select = True
+            update_text(selected_item, context)
         return {"FINISHED"}
 
 
@@ -189,10 +194,13 @@ class TEXT_OT_select_previous(bpy.types.Operator):
     bl_label = "Select Previous"
 
     def execute(self, context):
+        scene = context.scene
         current_index = context.scene.text_strip_items_index
         if current_index > 0:
             context.scene.text_strip_items_index -= 1
-            update_text(self, context)
+            selected_item = scene.text_strip_items[scene.text_strip_items_index]
+            selected_item.select = True
+            update_text(selected_item, context)
         return {"FINISHED"}
 
 
