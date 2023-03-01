@@ -1,0 +1,1 @@
+# text_strip_list
